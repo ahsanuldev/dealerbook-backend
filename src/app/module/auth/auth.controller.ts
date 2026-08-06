@@ -18,6 +18,15 @@ const register = catchAsync(async (req: Request, res: Response) => {
 const login = catchAsync(async (req: Request, res: Response) => {
     const result = await AuthService.login(req.body);
 
+    // Also set the token as an httpOnly cookie — the auth middleware
+    // checks the Authorization header first, then this cookie
+    res.cookie('accessToken', result.accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days — matches the token expiry
+    });
+
     sendResponse(res, {
         statusCode: status.OK,
         success: true,
@@ -27,8 +36,11 @@ const login = catchAsync(async (req: Request, res: Response) => {
 });
 
 const logout = catchAsync(async (req: Request, res: Response) => {
-    // If we were using cookies, we'd clear them here:
-    // res.clearCookie('token');
+    res.clearCookie('accessToken', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    });
 
     sendResponse(res, {
         statusCode: status.OK,
