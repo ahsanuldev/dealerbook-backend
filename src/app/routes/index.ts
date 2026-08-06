@@ -6,6 +6,8 @@ import { FarmerRoutes } from '../module/farmer/farmer.route';
 import { ItemRoutes } from '../module/item/item.route';
 import { TransactionRoutes } from '../module/transaction/transaction.route';
 import { MeRoutes } from '../module/me/me.route';
+import { DashboardRoutes } from '../module/dashboard/dashboard.route';
+import { ReportRoutes } from '../module/report/report.route';
 
 const router = express.Router();
 
@@ -37,6 +39,14 @@ const moduleRoutes = [
     {
         path: '/me',
         route: MeRoutes,
+    },
+    {
+        path: '/dashboard',
+        route: DashboardRoutes,
+    },
+    {
+        path: '/reports',
+        route: ReportRoutes,
     },
     // Add more routes here...
 ];
