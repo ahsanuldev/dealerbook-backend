@@ -1,0 +1,22 @@
+
+model AuditLog {
+  id         String      @id @default(cuid())
+  dealerId   String
+  dealer     Dealer      @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+
+  tableName  String
+  recordId   String
+  action     AuditAction
+
+  changedById String
+  changedBy   User        @relation(fields: [changedById], references: [id])
+
+  oldValue   Json?
+  newValue   Json?
+
+  createdAt  DateTime    @default(now())
+
+  @@index([dealerId])
+  @@index([dealerId, tableName, recordId])
+  @@map("audit_logs")
+}

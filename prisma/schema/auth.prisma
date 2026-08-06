@@ -1,0 +1,26 @@
+
+model User {
+  id           String   @id @default(cuid())
+  dealerId     String
+  name         String
+  phone        String
+  email        String?
+  passwordHash String
+  role         UserRole
+  status       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // If role = FARMER, this links to their farmer profile (1:1, optional)
+  farmerProfile Farmer? @relation("FarmerLogin")
+
+  // Transactions this user (manager/admin) created
+  createdTransactions Transaction[] @relation("TransactionCreatedBy")
+  dealer       Dealer   @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+
+  auditLogs    AuditLog[]
+
+  @@index([dealerId])
+  @@unique([dealerId, phone])
+  @@map("users")
+}

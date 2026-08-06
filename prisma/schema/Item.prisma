@@ -1,0 +1,20 @@
+
+model Item {
+  id        String       @id @default(cuid())
+  dealerId  String
+  dealer    Dealer       @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+
+  name      String
+  category  ItemCategory
+  unit      String       // e.g. "bag", "piece", "ml", "kg"
+  unitPrice Decimal?     @db.Decimal(12, 2)
+  status    Boolean      @default(true)
+
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  transactionItems TransactionItem[]
+
+  @@index([dealerId])
+  @@map("items")
+}

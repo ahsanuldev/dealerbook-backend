@@ -1,0 +1,47 @@
+
+model Transaction {
+  id            String          @id @default(cuid())
+  dealerId      String
+  dealer        Dealer          @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+
+  farmerId      String
+  farmer        Farmer          @relation(fields: [farmerId], references: [id], onDelete: Restrict)
+
+  type          TransactionType
+  date          DateTime        @default(now())
+  amount        Decimal         @db.Decimal(12, 2)
+  paymentMethod PaymentMethod?
+  notes         String?
+
+  createdById   String
+  createdBy     User            @relation("TransactionCreatedBy", fields: [createdById], references: [id])
+
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  items         TransactionItem[]
+
+  @@index([dealerId])
+  @@index([dealerId, farmerId])
+  @@index([dealerId, date])
+  @@map("transactions")
+}
+
+
+
+model TransactionItem {
+  id            String      @id @default(cuid())
+  transactionId String
+  transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+
+  itemId        String
+  item          Item        @relation(fields: [itemId], references: [id], onDelete: Restrict)
+
+  quantity      Decimal     @db.Decimal(12, 2)
+  unitPrice     Decimal     @db.Decimal(12, 2)
+  subtotal      Decimal     @db.Decimal(12, 2)
+
+  @@index([transactionId])
+  @@index([itemId])
+  @@map("transaction_items")
+}

@@ -1,0 +1,31 @@
+
+enum UserRole {
+  ADMIN
+  MANAGER
+  FARMER
+}
+
+enum ItemCategory {
+  FEED
+  MEDICINE
+  CHICKS
+  OTHER
+}
+
+enum TransactionType {
+  PURCHASE // farmer took goods (increases due)
+  PAYMENT  // farmer paid money (decreases due)
+}
+
+enum PaymentMethod {
+  CASH
+  BANK
+  MOBILE_BANKING
+  OTHER
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+}
