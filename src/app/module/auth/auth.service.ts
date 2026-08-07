@@ -10,8 +10,9 @@ import { UserRole } from '../../../generated/prisma/client/enums';
 
 const register = async (payload: IRegisterPayload) => {
     // 1. Check if dealer phone exists
+    console.log(payload)
     const existingDealer = await prisma.dealer.findFirst({
-        where: { phone: payload.dealer.phone }
+        where: { phone: payload.phone }
     });
 
     if (existingDealer) {
@@ -23,23 +24,23 @@ const register = async (payload: IRegisterPayload) => {
         // Create Dealer
         const dealer = await tx.dealer.create({
             data: {
-                businessName: payload.dealer.businessName,
-                ownerName: payload.dealer.ownerName,
-                phone: payload.dealer.phone,
-                address: payload.dealer.address,
+                businessName: payload.businessName,
+                ownerName: payload.ownerName,
+                phone: payload.phone,
+                address: payload.address,
             }
         });
 
-        const password = payload.admin.password || '123456';
+        const password = payload.password || '123456';
         const passwordHash = await bcryptHelper.hashPassword(password, 10);
 
-        // Create Admin User
+        // Create Admin User — owner name and phone double as the admin account
         const adminUser = await tx.user.create({
             data: {
                 dealerId: dealer.id,
-                name: payload.admin.name,
-                phone: payload.admin.phone,
-                email: payload.admin.email,
+                name: payload.ownerName,
+                phone: payload.phone,
+                email: payload.email,
                 passwordHash,
                 role: UserRole.ADMIN,
                 status: true,

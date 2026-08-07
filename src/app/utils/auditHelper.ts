@@ -1,4 +1,4 @@
-import { Prisma } from '../../generated/prisma/client';
+import { Prisma } from '../../generated/prisma/client/client';
 import type { PrismaClient } from '../../generated/prisma/client/internal/class';
 import { AuditAction } from '../../generated/prisma/client/enums';
 
